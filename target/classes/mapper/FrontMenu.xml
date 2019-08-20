@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="biz.UserMapper">
+    <!--    获取动态菜单-->
+    <select id="selectMenu" parameterType="String" resultType="javabean.FrontMenu">
+        select a.* from front_menu a,front_menu_occ b where b.menu_id = a.menu_id and b.occ_id = #{userocc}
+    </select>
+    <!--    获取所有菜单的名字和ID-->
+    <select id="selectViewMenu" resultType="javabean.View_FrontMenu">
+        select MENU_ID,MENU_NAME from View_FrontMenu
+    </select>
+    <!--    获取职业指定的菜单名字和ID-->
+    <select id="selectViewMenuCoo" parameterType="String" resultType="javabean.View_FrontMenu">
+        select a.MENU_ID,a.MENU_NAME from VIEW_FRONTMENU a,front_menu_occ b where b.menu_id = a.menu_id and b.occ_id = #{occname}
+    </select>
+</mapper>

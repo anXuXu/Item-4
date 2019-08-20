@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "biz.UserMapper">
+<!--    注册-->
+    <insert id="inserUser" parameterType = "javabean.FrontUsers">
+        insert into FRONTUSER(userName,userPwd,userEmall,education_Id,occupation_Id,sex)
+        values(#{userName},#{userPwd},#{userEmall},#{education_Id},#{occupation_Id},#{sex})
+    </insert>
+<!--    <insert id="addUser" parameterType = "javabean.FrontUsers">-->
+<!--        <selectKey KeyProperty="userno" order="BEFORE" resultType="javabean.lang.Integer">-->
+<!--            select SQ_FRONTUSER.nextval from dual-->
+<!--        </selectKey>-->
+<!--        insert into FRONTUSER(userno,userName,userPwd,userEmall,education_Id,occupation_Id,sex)-->
+<!--        values(#{userno},#{userName},#{userPwd},#{userEmall},#{education_Id},#{occupation_Id},#{sex})-->
+<!--    </insert>-->
+    <!--    嵌套结果-->
+<!--    <select id="selectUserWhere" parameterType="String" resultMap="userEducaMap">-->
+<!--        select a.userName,a.userPwd,a.userEmall,b.education_name-->
+<!--        from frontuser a , front_education b-->
+<!--        where a.education_id = b.education_id and a.userName = #{userName}-->
+<!--    </select>-->
+<!--    <resultMap type="javabean.FrontUsers" id="userEducaMap">-->
+<!--        <id property="userName" column="userName"></id>-->
+<!--        <result column="userPwd" property="userPwd"></result>-->
+<!--        <result column="userEmall" property="userEmall"></result>-->
+<!--        <result column="education_Id" property="education_Id"></result>-->
+<!--        <result column="occupation_Id" property="occupation_Id"></result>-->
+<!--        <result column="sex" property="sex"></result>-->
+<!--        <association property="frontEducation" column="education_Id" javaType="javabean.FrontEducation">-->
+<!--        <id property="education_Id" column="education_Id"></id>-->
+<!--            <result column="education_Name" property="education_Name"></result>-->
+<!--        </association>-->
+<!--    </resultMap>-->
+<!--    嵌套结果集合-->
+<!--    <select id="getRoleByID" parameterType="String" resultMap="getRoleUsers">-->
+<!--        select a.userName,a.userPwd,a.userEmall,b.education_name-->
+<!--        from frontuser a , front_education b-->
+<!--        where a.education_id = b.education_id and b.education_id = #{education_id}-->
+<!--        <resultMap type="javabean.FrontEducation" id="getRoleUsers">-->
+<!--        <id property="education_Id" column="education_Id"></id>-->
+<!--        <result property="education_Name" column="education_Name"></result>-->
+<!--        <collection property=""></collection>-->
+<!--        </resultMap>-->
+<!--    </select>-->
+<!--    登录-->
+    <select id="selectUser" parameterType ="String" resultType="javabean.FrontUser" >
+        select * from FRONTUSER where userName = #{userName}
+    </select>
+<!--    获取人员信息-->
+    <select id="selectUserInfo" resultType="javabean.FrontUser">
+        select a.*,b.education_name,c.occupation_name
+        from frontuser a , front_education b,front_occupation c
+        where a.education_id = b.education_id and a.occupation_id = c.occupation_id
+    </select>
+<!--    日志-->
+    <insert id="journal" parameterType="String">
+        INSERT INTO JOURNAL (affair,Journal_date) VALUES(#{affair},#{Journal_date})
+    </insert>
+<!--    学历-->
+    <select id="selectEduca" resultType="javabean.FrontEducation">
+        select * from front_education
+    </select>
+<!--    职业-->
+    <select id="selectOccupa" resultType="javabean.FrontOccupation">
+        select * from front_occupation
+    </select>
+<!--    查询账号是否可以登录-->
+    <select id="selectVerifica"  parameterType="String" resultType="javabean.FrontUser">
+        SELECT * FROM FRONTUSER WHERE USERNAME = #{userName}
+    </select>
+    <select id="selectOccupaAndUser" parameterType="String" resultType="javabean.FrontOccupation">
+    SELECT * FROM FRONT_OCCUPATION WHERE OCCUPATION_ID = #{occname}
+    </select>
+</mapper>

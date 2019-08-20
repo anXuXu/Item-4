@@ -1,0 +1,112 @@
+cykjcykj
+cykj1377
+学习日报：
+
+	一.什么是Mybatis？
+
+mybatis是一个优秀的基于java的持久层框架，它内部封装了jdbc，使开发者只需要关注sql语句本身，而不需要花费精力去处理加载驱动、创建连接、创建statement等繁杂的过程。
+
+mybatis通过xml或注解的方式将要执行的各种statement配置起来，并通过java对象和statement中sql的动态参数进行映射生成最终执行的sql语句，最后由mybatis框架执行sql并将结果映射为java对象并返回。
+
+	二.什么是hibernate？
+
+hibernate是数据访问层的框架，对jdbc进行了封装，使用hibernate可以直接访问对象，hibernate自动将此访问转换为sql执行，从而达到间接访问数据库的目的，简化了数据访问层的代码开发。
+
+hibernate和mybatis对比：
+
+共性：采用ORM思想解决了实体和数据库映射的问题，对jdbc进行了封装，屏蔽了jdbc api底层访问细节，使我们不用与jdbc api打交道，就可以完成对数据库的持久化操作。
+
+Hibernate是全自动化ORM的映射工具，
+
+
+
+
+
+今天遇到的BUG主要还是一些框架上使用别人写好的“规则”不怎么会应用的问题
+
+第一个，今天下午卡了很久的一个bug，主要因为jar包存在却找不到对应的方法，正常导包没有出现问题，但是后来将项目重新加载了一遍后。发现这个
+
+还是没有解决。然后换了一个远程仓库和本地仓库的地址重新获取就OK了
+
+第二个，在进行完注册后，多次注册（偶尔直接登录）都会出现访问错误的500情况。还没有找到解决问题。因为报错的地方还是第一个问题的地方。
+
+
+心得：这阶段学了快一半，写的代码都是在别人的规则下写出来的，总感觉规则太多有些记不住。而且经常会有一些自己的写法在里面，就很容易出现BUG
+
+容易浮躁。可能也是因为自己写的还是太少的缘故。明天希望可以多接触一下BUG。不然到时候做项目在出现一些自己没有接触过的就很容易暴毙。
+
+
+
+
+
+
+7、springMVC上传文件
+<form id="uploadfiles" enctype="multipart/form-data">
+    <input type="file" multiple="multiple" id="file_upload" name="file_upload" />
+    <input type="button" value="上传" onclick="upload()" />
+</form>
+
+function upload() {
+    alert("啊我要进来了");
+    var formData = new FormData($( "#uploadfiles" )[0]);
+    $.ajax({
+        type: "post",
+        url: "user/upload.do",
+        dataType: "json",
+        data: formData,
+        /**
+         *必须false才会自动加上正确的Content-Type
+         */
+        contentType : false,
+        /**
+         * 必须false才会避开jQuery对 formdata 的默认处理
+         * XMLHttpRequest会对 formdata 进行正确的处理
+         */
+        processData : false,
+        success: function(data){//从后端返回数据进行处理
+            if(data){
+                alert("上传成功！");
+            }else{
+                alert("上传失败！");
+            }
+        },
+        error: function(err) {//提交出错
+            $("#msg").html(JSON.stringify(err));//打出响应信息
+            alert("服务器无响应");
+        }
+    });
+
+
+}
+
+
+
+@RequestMapping(value = "/upload", produces = "application/json;charset=UTF-8")
+@ResponseBody
+public boolean uploadFiles(@RequestParam("file_upload") MultipartFile[] files) throws IOException {
+    System.out.println("啊我要进来了");
+    boolean result = false;
+    String realPath;
+    for(int i=0;i<files.length;i++){
+        if (!files[i].isEmpty()) {
+            String uniqueName=files[i].getOriginalFilename();//得到文件名
+            realPath="F:"+ File.separator+uniqueName;//文件上传的路径这里为E盘
+            files[i].transferTo(new File(realPath));  // 转存文件
+            result = true;
+            System.out.println(result+uniqueName);
+        }
+    }
+
+             return result;
+}
+
+在spring滴配置文件上写：
+<bean id="multipartResolver"
+      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <!-- 默认编码 -->
+    <property name="defaultEncoding" value="utf-8" />
+    <!-- 文件大小最大值 -->
+    <property name="maxUploadSize" value="10485760000" />
+    <!-- 内存中的最大值 -->
+    <property name="maxInMemorySize" value="40960" />
+</bean>
