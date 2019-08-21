@@ -1,7 +1,6 @@
 package testt.springmvc;
 
 
-import com.opensymphony.xwork2.ActionContext;
 import javabean.ImageUtil;
 import javabean.JsonMsg;
 import org.springframework.stereotype.Controller;

@@ -57,8 +57,8 @@ public class UserDao {
     public Map<String, List<FrontMenu>> selectMenu(String occid){
 //        ApplicationContext app =  new ClassPathXmlApplicationContext("applicationContext.xml");
 //        UserMapper userMapper = app.getBean("userMapper",UserMapper.class);
-        Map<String, List<FrontMenu>> frontMenuHashMap = new HashMap<>();
-        List<FrontMenu> frontMenus = new ArrayList<>();
+        Map<String, List<FrontMenu>> frontMenuHashMap = new HashMap<String, List<FrontMenu>>();
+        List<FrontMenu> frontMenus = new ArrayList<FrontMenu>();
         frontMenus = userMapper.selectMenu(occid);
         System.out.println(frontMenus.get(0).getMenu_Name());
         frontMenuHashMap.put("menuname",frontMenus);
@@ -83,7 +83,7 @@ public class UserDao {
     public List<View_FrontMenu> selectViewMenu(){
 //        ApplicationContext app =  new ClassPathXmlApplicationContext("applicationContext.xml");
 //        UserMapper userMapper = app.getBean("userMapper",UserMapper.class);
-        List<View_FrontMenu> list = new ArrayList<>();
+        List<View_FrontMenu> list = new ArrayList<View_FrontMenu>();
         list = userMapper.selectViewMenu();
         return list;
     }
@@ -96,7 +96,7 @@ public class UserDao {
     public Map<String, List<View_FrontMenu>> selectViewMenuCoo(String occname){
 //        ApplicationContext app =  new ClassPathXmlApplicationContext("applicationContext.xml");
 //        UserMapper userMapper = app.getBean("userMapper",UserMapper.class);
-        List<View_FrontMenu> list = new ArrayList<>();
+        List<View_FrontMenu> list = new ArrayList<View_FrontMenu>();
         list = userMapper.selectViewMenuCoo(occname);
         Map<String,List<View_FrontMenu>> frontMenuHashMap = new HashMap<>();
         frontMenuHashMap.put("menuname",list);
@@ -110,7 +110,7 @@ public class UserDao {
     public List<FrontEducation> selectEduca(){
 //        ApplicationContext app =  new ClassPathXmlApplicationContext("applicationContext.xml");
 //        UserMapper userMapper = app.getBean("userMapper",UserMapper.class);
-        List<FrontEducation> list = new ArrayList<>();
+        List<FrontEducation> list = new ArrayList<FrontEducation>();
         list = userMapper.selectEduca();
         return list;
     }
@@ -122,7 +122,7 @@ public class UserDao {
     public List<FrontOccupation> selectOccupa(){
 //        ApplicationContext app =  new ClassPathXmlApplicationContext("applicationContext.xml");
 //        UserMapper userMapper = app.getBean("userMapper",UserMapper.class);
-        List<FrontOccupation> list = new ArrayList<>();
+        List<FrontOccupation> list = new ArrayList<FrontOccupation>();
         list = userMapper.selectOccupa();
         return list;
     }
@@ -136,7 +136,7 @@ public class UserDao {
 //        ApplicationContext app =  new ClassPathXmlApplicationContext("applicationContext.xml");
 //        UserMapper userMapper = app.getBean("userMapper",UserMapper.class);
         FrontOccupation frontOccupation = new FrontOccupation();
-        Map<String,FrontOccupation> frontOccupationMap = new HashMap<>();
+        Map<String,FrontOccupation> frontOccupationMap = new HashMap<String,FrontOccupation>();
         frontOccupation = userMapper.selectOccupaAndUser(occname);
         frontOccupationMap.put("occ",frontOccupation);
         return frontOccupationMap;

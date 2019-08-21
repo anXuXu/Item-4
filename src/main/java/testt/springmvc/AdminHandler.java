@@ -1,21 +1,28 @@
 package testt.springmvc;
 
-import com.opensymphony.xwork2.ActionContext;
 import javabean.*;
-import org.apache.struts2.ServletActionContext;
+
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import testt.UserDao;
 import testt.model.User;
+import org.springframework.http.HttpHeaders;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,16 +34,16 @@ public class AdminHandler {
 
 
     public JsonMsg jsonMsg;
-    public HashMap<String,Object> map = new HashMap<>();
-    public HashMap<String, List> listHashMap = new HashMap<>();
-    public HashMap<String,Object> educationMap = new HashMap<>();
-    public HashMap<String,Object> occuoationMap = new HashMap<>();
-    private Map<String, List<FrontMenu>> frontMenuHashMap = new HashMap<>();
-    public List<FrontEducation> frontEducations = new ArrayList<>();
-    public List<FrontOccupation> frontOccupations = new ArrayList<>();
+    public HashMap<String,Object> map = new HashMap<String,Object>();
+    public HashMap<String, List> listHashMap = new HashMap<String, List>();
+    public HashMap<String,Object> educationMap = new HashMap<String,Object>();
+    public HashMap<String,Object> occuoationMap = new HashMap<String,Object>();
+    private Map<String, List<FrontMenu>> frontMenuHashMap = new HashMap<String, List<FrontMenu>>();
+    public List<FrontEducation> frontEducations = new ArrayList<FrontEducation>();
+    public List<FrontOccupation> frontOccupations = new ArrayList<FrontOccupation>();
     private List<FrontUser> list = new ArrayList<FrontUser>();
     private List<View_FrontMenu> frontMenus = new ArrayList<View_FrontMenu>();
-    private Map<String, List<View_FrontMenu>> viewmenu = new HashMap<>();
+    private Map<String, List<View_FrontMenu>> viewmenu = new HashMap<String, List<View_FrontMenu>>();
     @Resource
     private UserDao userDaoss;
     public AdminHandler (){
@@ -210,7 +217,7 @@ public class AdminHandler {
      */
     @RequestMapping(value="/userMenu.action")
     public ModelAndView userMenu(HttpSession session){
-        List<FrontMenu> fro = new ArrayList<>();
+        List<FrontMenu> fro = new ArrayList<FrontMenu>();
         System.out.println((String) session.getAttribute("occid"));
         String occid  = (String) session.getAttribute("occid");
         frontMenuHashMap = userDaoss.selectMenu(occid);
@@ -325,6 +332,27 @@ public class AdminHandler {
         }
 
         return result;
+    }
+
+
+    @RequestMapping("/downLoad.action")
+    public ResponseEntity<byte[]> fileDownLoad(HttpServletRequest request,@RequestParam("downPath")String fileName) throws Exception{
+
+        ServletContext servletContext = request.getServletContext();
+//        String fileName="童话镇.mp3";
+        String realPath = servletContext.getRealPath("upload/"+fileName);//得到文件所在位置
+        InputStream in=new FileInputStream(new File(realPath));//将该文件加入到输入流之中
+        byte[] body=null;
+        body=new byte[in.available()];// 返回下一次对此输入流调用的方法可以不受阻塞地从此输入流读取（或跳过）的估计剩余字节数
+        in.read(body);//读入到输入流里面
+
+        fileName=new String(fileName.getBytes("UTF-8"),"iso8859-1");//防止中文乱码
+        HttpHeaders headers=new HttpHeaders();//设置响应头
+        headers.add("Content-Disposition", "attachment;filename="+fileName);
+        HttpStatus statusCode = HttpStatus.OK;//设置响应吗
+        ResponseEntity<byte[]> response=new ResponseEntity<byte[]>(body, headers, statusCode);
+        return response;
+
     }
     public UserDao getUserDaoss() {
         return userDaoss;

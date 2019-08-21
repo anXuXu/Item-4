@@ -7,7 +7,7 @@ public class FrontEducation {
 
     private String education_Id;
     private String education_Name;
-    private List<FrontUser> frontUserList = new ArrayList<>();
+    private List<FrontUser> frontUserList = new ArrayList<FrontUser>();
     public FrontEducation() {
 
     }

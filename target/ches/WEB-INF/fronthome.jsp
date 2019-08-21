@@ -52,7 +52,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <a class="button is-info is-outlined download" href=<%=path+"/filetest/downLoad?downPath=我的问题.txt"%>>我要下载</a>
+                    <a class="button is-info is-outlined download" href=<%=path+"/admin/downLoad.action?downPath=我的问题.txt"%>>我要下载</a>
                     <a class="button is-success is-outlined">我要上传</a>
                     <a class="button is-danger is-outlined">个人信息</a>
                     <div class="ibox-tools">
